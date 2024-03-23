@@ -1,0 +1,19 @@
+{
+  "name": "simpsons-pfp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx @airstack/frog dev",
+    "serve": "bun run src/index.tsx"
+  },
+  "dependencies": {
+    "@airstack/frog": "^0.0.7",
+    "dotenv": "^16.4.5",
+    "frog": "latest",
+    "hono": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun": "latest"
+  }
+}
