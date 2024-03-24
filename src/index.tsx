@@ -30,10 +30,14 @@ const extractLabelsFromImage = async (imageUrl: string) => {
         content: [
           {
             type: "text",
-            text: "Based on the image, provide a description suitable for creating a character illustration. " +
-              "Detail the [hair color] and [hair style], [eye color], and describe any notable clothing " +
-              "or accessories in a cute anime style. Keep the description brief and focused on these features."
+            text: "Based on the image, provide a detailed character description suitable for creating a chibi-style anime illustration. " +
+              "Note the [gender], [hair color], and [hair style], [eye color], and any notable expressions or emotions conveyed. " +
+              "Highlight key features that should be exaggerated in a chibi rendition, like eye size or head shape. " +
+              "Describe the clothing style and any distinctive accessories, ensuring they can be adapted to a cute, simplified anime form. " +
+              "Suggest a single color background that matches the overall tone of the photo, be it warm, fun, or colorful, " +
+              "and ensures the single chibi character will be the focal point with a friendly and engaging expression."
           },
+
           {
             type: "image_url",
             image_url: {
@@ -50,14 +54,15 @@ const extractLabelsFromImage = async (imageUrl: string) => {
 //convert and edit image
 async function convertAndEditImage(_prompt: string) {
   try {
-    const Originalprompt = `Create a stylized anime character illustration that reflects the [gender] identified from the photo.  ` +
-      `with a modern anime aesthetic, featuring the hairstyle described, ` +
-      `large expressive [eye color] eyes, and matching [hair color] hair. ` +
-      `centrally positioned as the focal point of the image. ` +
-      `They should have a cute, welcoming expression with a slight smile and eyes looking directly at the viewer. ` +
-      `Their outfit and accessories should reflect a cute anime style derived from the description. ` +
-      `The character's pose should be relaxed and inviting, with soft, approachable body language.`;
-    `${_prompt}`
+    const Originalprompt =
+      `Create a single chibi-style close up portrait of an anime character,The character should have a clean and modern anime-inspired aesthetic, ` +
+      `based on the following description: ${_prompt}.` +
+      `The character should have hair and eye colors that match the description provided. ` +
+      `Dress them in clothing and accessories as described. ` +
+      `Design the character with typical chibi characteristics: a disproportionately larger head and eyes, and a smaller body. ` +
+      `Set against a solid pastel coloured background, only one character should be in the illustration ` +
+      `The character should be facing the viewer with a welcoming and warm expression,The style should be clean, bright, and reminiscent of high-quality digital anime illustrations.`;
+
 
     const prompt = `DO NOT add any detail, just use it AS-IS: ${Originalprompt}`;
 
