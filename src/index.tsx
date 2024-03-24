@@ -18,6 +18,7 @@ import {
   FarcasterChannelParticipantsOutput,
   getFarcasterChannelParticipants
 } from "@airstack/frog";
+import { neynar } from 'frog/hubs';
 
 
 const openAi = new OpenAI({
@@ -29,6 +30,7 @@ config();
 // Instantiate new Frog instance with Airstack API key
 export const app = new Frog({
   apiKey: process.env.AIRSTACK_API_KEY as string,
+  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
 });
 
 //extract labels
@@ -44,11 +46,10 @@ const extractLabelsFromImage = async (imageUrl: string) => {
             type: "text",
             text:
               `Based on the image, provide a detailed character description suitable for creating a chibi-style anime illustration., 
-              Note the gender, hair color, and [hair style], eye color, and any notable expressions or emotions conveyed., 
-              Highlight key features that should be exaggerated in a chibi rendition, like eye size or head shape, 
+              Describe the gender, hair color, and hair style, eye color, and any notable expressions or emotions conveyed.,
               Describe the clothing style and any distinctive accessories, ensuring they can be adapted to a cute, simplified anime form. 
-              Suggest a single color background that matches the overall tone of the photo, be it warm, fun, or colorful, 
-              and ensures the single chibi character will be the focal point with a friendly and engaging expression.`
+              Suggest a background that matches the overall tone of the photo, be it warm, fun, or colorful, 
+              and ensures the character will be the focal point with a friendly and engaging expression.`
           },
 
           {
@@ -65,35 +66,35 @@ const extractLabelsFromImage = async (imageUrl: string) => {
   return response.choices?.[0].message.content;
 }
 //convert and edit image
-// async function convertAndEditImage(_prompt: string) {
-//   try {
-//     const Originalprompt =
-//       `Create a single chibi-style close up portrait of a single  anime character, 
-//       based on the following description: ${_prompt}. The character should have hair and eye colors that match the description provided. 
-//       Dress them in clothing and accessories as described. 
-//       The character has typical chibi characteristics: a disproportionately larger head and eyes, and a smaller body. 
-//       The character should be facing the viewer with a welcoming and warm expression,The style should be clean, bright, and reminiscent of high-quality digital anime illustrations.`;
+async function convertAndEditImage(_prompt: string) {
+  try {
+    const Originalprompt =
+      `Create a single chibi-style close up portrait of a single  anime character, 
+      based on the following description: ${_prompt}. The character should have hair and eye colors that match the description provided. 
+      Dress them in clothing and accessories as described. 
+      The character has typical chibi characteristics: a disproportionately larger head and eyes, and a smaller body. 
+      The character should be facing the viewer with a welcoming and warm expression,The style should be clean, bright, and reminiscent of high-quality digital anime illustrations.`;
 
 
-//     const prompt = `DO NOT add any detail, just use it AS-IS: ${Originalprompt}`;
+    const prompt = `DO NOT add any detail, just use it AS-IS: ${Originalprompt}`;
 
-//     // Use the image stream directly for the OpenAI call
-//     const openAiResponse = await openAi.images.generate({
-//       // image: imageStream,
-//       model: "dall-e-3",
-//       response_format: 'b64_json',
-//       style: "natural",
-//       size: "1024x1024",
-//       prompt: prompt,
-//     });
+    // Use the image stream directly for the OpenAI call
+    const openAiResponse = await openAi.images.generate({
+      // image: imageStream,
+      model: "dall-e-3",
+      response_format: 'b64_json',
+      style: "natural",
+      size: "1024x1024",
+      prompt: prompt,
+    });
 
 
 
-//     return openAiResponse.data[0].b64_json;
-//   } catch (error) {
-//     console.error('Error:', error);
-//   }
-// }
+    return openAiResponse.data[0].b64_json;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 // Function to check channel membership
 const isUserInChannel = async (fid: string, data: FarcasterChannelParticipantsOutputData[]) => {
