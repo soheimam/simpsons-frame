@@ -21,6 +21,7 @@ import {
 import { neynar } from 'frog/hubs';
 
 
+
 const openAi = new OpenAI({
   apiKey: process.env['OPENAI_API_KEY'], // This is the default and can be omitted
 });
@@ -46,8 +47,8 @@ const extractLabelsFromImage = async (imageUrl: string) => {
             type: "text",
             text:
               `Based on the image, provide a detailed character description suitable for creating a chibi-style anime illustration., 
-              Describe the gender, hair color, and hair style, eye color, and any notable expressions or emotions conveyed.,
-              Describe the clothing style and any distinctive accessories, ensuring they can be adapted to a cute, simplified anime form. 
+              Describe the gender, hair color, and hair style, eye color, and any notable expressions or emotions conveyed,
+              the clothing style and any distinctive accessories, ensuring they can be adapted to a cute, simplified anime form. 
               Suggest a background that matches the overall tone of the photo, be it warm, fun, or colorful, 
               and ensures the character will be the focal point with a friendly and engaging expression.`
           },
@@ -83,7 +84,7 @@ async function convertAndEditImage(_prompt: string) {
       // image: imageStream,
       model: "dall-e-3",
       response_format: 'b64_json',
-      style: "natural",
+      style: "vivid",
       size: "1024x1024",
       prompt: prompt,
     });
@@ -125,7 +126,7 @@ const isAllowed = async (targetUserFid: number, channelName: string) => {
 app.frame('/', async (c) => {
   console.log(c)
   const { status, frameData } = c;
-  console.log(status, frameData, 'status')
+
   // Assume frameData contains the fid (Farcaster ID) of the user
   const fid = frameData?.fid || 1
   if (!fid) {
@@ -137,8 +138,13 @@ app.frame('/', async (c) => {
   return c.res({
     action: isInTheTargetChannel ? '/submit' : '/not-allowed',
     image: (
-      <div style={{ backgroundImage: 'url("https://portalapistack-uploadbucket5b1e560c-1uw248zf0758m.s3.us-east-2.amazonaws.com/protected/us-east-2%3A52bd2aac-245a-45e7-87ad-c3b3f59431f6/0d53e5b6-5403-4e4c-ac50-ed091dc4db4a/backgrounds-922bb2f5-da02-48d4-a7c6-a7568913d99a-bg_pink.jpeg.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAR3QXGJWVAO4VLWFI%2F20240324%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20240324T140007Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEF4aCXVzLWVhc3QtMiJHMEUCIDUAR%2FGY0YQUpwRrAHZmtoWr86CH3hecCb%2FV4FsDXcGCAiEAmCQB9GRQMsi8vYBbZs5Z1AQ%2BFGvMtnodhzvg14SzMWYqxAQIdxABGgwxMjc4MjM5MjQ2NTAiDNNymsLloA0q14zlmyqhBOMmykhJtPV%2FaGSN82Ti%2FumW3i4jX9attkskEOLmJY%2FTUAFE0T2Bi31wX5eTpi0ivAIMGBe9N0w6xBzqe3PobEWiQmVUiGHTWoZgRQqwKXefSK7mFded%2BtcXdGgDdIZL2XCfPmefLkWGrb0ptWkoC%2BW86huKqgJLHJF7Y14GmiYXFw0lbGcITB1jFD4yi5tr89JbN8zswD1CmxFSxsBeWr01u27prGplyPpucvlRnK8g%2Byok6NYyjw3O5sNeU4C8y5BI6wWHqEUNXmyQErmu9bexpGh26jpJBOp13vIJ8ISgi4XNeLWSIJ3a%2Fb94yiey3abxzc9SwpkKMiDd3Kcjr4ma3MxJnVbCPKHwjB8ok9keEdSyFPG8ygVkZwPWMZGI813Xq9yuTEJipJ8LglMw0gPLawZaAN3uvkCyLRMu1yr2pfjNHzr2ggWCrd37fdZsOzjj2V6s%2BQ1VYaYwT4za1Cp81n7aaN39mSHvUv5vgFO56af0Fi46MqUVJezRzthGU19EQdArOPkXvPqFtja3x4QMIRXCfnr3%2BNaNXaEc8SwuCQcgfl4%2FjK8c7O6NOxWQWy5Izom6UacuC%2BBhoLi0QW%2FcojIO%2BiFfE7%2FSiTx%2FHss%2FjOmjJpUYryYkOq0dsAiRhxbE2drt5630mIgy8NWwV3J913EaEBOjGw7%2BBxCr8KMfX52wzt97Fzvcy2QvqFpPqs3p5IGepSOds99iR8veXAthMKfjgLAGOoUCnxpQU3GQJ8jUvWNzM82MqPEncZyPPbWjflQYGngTCgdXFwFFvv9q3AQod1ypTHSXGizwgmXtG6koZS5xOIEZ%2Bh4cdvSMtUOd4kMfiZhD3XfyOjKx1fwJ%2F6XsLU2tcuXNEgwNG%2FNA5ZAKiOcg6dCsK7ZtyicIwh0P%2BpUVM526xJeFAbzHTiInClm9oeAnM4RMDyfWv7HDiyTU6N6z16tZ%2B7VzwqGL7pG15mL28HavEMTlI0P5v2TXVpGozOaUEtB0yi6Edb1dzvEcQ4ASC7BbiUyxdq7hMuQkku6oCUoNCEiY6j09xauJeor6V20FhoGvC4eES9YkwZ4%2Bzc5dzMNx12bxpEoU&X-Amz-Signature=4939f836e866cd9de985880eb6bcd70bf76cb226066d1c340aaf04289a2a9fe5&X-Amz-SignedHeaders=host&x-id=GetObject")', height: '100%', width: '100%', backgroundSize: 'cover', color: 'purple', fontWeight: '100', display: 'flex', alignItems: "center", justifyItems: "center", fontSize: 60 }}>
-        Click to cuteify your image
+      <div style={{
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        backgroundImage: 'url("https://portalapistack-uploadbucket5b1e560c-1uw248zf0758m.s3.us-east-2.amazonaws.com/protected/us-east-2%3A52bd2aac-245a-45e7-87ad-c3b3f59431f6/0d53e5b6-5403-4e4c-ac50-ed091dc4db4a/7fa091ad-214e-420c-9392-818ffb79a0ac.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAR3QXGJWVBM5V4AOG%2F20240324%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20240324T163116Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGAaCXVzLWVhc3QtMiJIMEYCIQC6FIu%2B2r7elCKQa3eDzAbQa%2BzmJMe8LIy29JhFh1N4XwIhAIn2v0JhKVmOtafcXSgV9%2FndLVY%2FoKGMGo0s6wcj4au1KsQECHoQARoMMTI3ODIzOTI0NjUwIgx3rkoqGgYT%2BzJdvuMqoQTeF17uKlYf%2BtPkUKqRE87ZTQ%2BMCGmP51swuaVOQvkicRbbHwqLer3xJGlydU6fZhzXOG3HyX9vdVGeHlCSnbnrKF3RjCgHaA%2B%2BqtdvOD3bGSU1xev%2Fp5nxZBb0RGjNr42Eur6uitqoi0rEHJqn2ItrUgkQrcosOnCwk0JvK%2FzAHnAy%2FmKYzbAPnROU%2B%2FQZXSaZe%2FxXFqGj9iPzcYQ1%2B0O1Xqukan1fKoi3c2I3OXBzUeoXdlmJ5Ez35iJcaM0D8nE5k0yh0GCmaYB8YJj4rDlCBrwy1WS0JE1JlLUjd%2FUm%2B6kFJ3SNMCKTj5%2BNIhtKaOQygWghCT5VHD0VMDDxDGmMSsGuIL4wf2R%2FOqb8AzKp2lyu%2BBet2WSfkZBiuJg4kb81xfP6YeErNf3RhIgHSAeGjTtmSfvS9AGQo%2B6VV0d2xEaTibsFuqx%2FHsYdR7nW3F%2FNdFCvMEqc4fZT12iEHqjpITUkFa9cB0SrtmdkbIsyehHSd7g14U7j7jbPBr81tEgSLeYaDrehrZozb03Dt8W0S2x3PAySRJE5967MRbfwst4ZrImoyjh0NAurx50jY8YQDmQ5CiwDa5vml%2BJzyabsD2PTGLcqhYfRUTYr0nAtfc3MexYNTNjP2WmDJkOFLKVN%2BdgBFhaqr6BstzvyW6qvJlayl1fqk8HTn%2FUmnhNfC%2BPcEYUNpipKWijPtfVljecciB0mTY1u6wc4zfulq%2FmR4TCXp4GwBjqEAtyTvtceE4Lb%2FWvZZHIKVTJvZX5%2BZrO4TQQxaOhp9CXu9zd%2FC5iSf9vaTyhNhsaUr2IA9YakI2bj3gSxxKSu5zZ1IagtbwEV0b2gGcuTmQwArAg3iW4S8peFIFyLfxSIYbbRaFERs0bvQFzE72SkuNYBZkWiob3iaF%2Fi8blmkCMhy8Bf%2FtxOkj4lA4g6kTG%2F4wb6GMA5VGcX99zE74JEyvBK4QCeiqSQX5vLZdoYCtKo9y7nQIbX9s07WmYoS4zF11Mw5%2F0VO8TSn6Z3wBMr0tu7FIpRUF%2BPUHA26fA7mLNVwZzX0VsdeUhcbYN7CkjpGupG%2BlhcpZAPZgjRLEvRepwzKQk4&X-Amz-Signature=08868fa91baea64b250bf7c59088034549f1539f934ae1a0751789d0eb0c47cc&X-Amz-SignedHeaders=host&x-id=GetObject")'
+      }}>
+
       </div>
     ),
     intents: [
@@ -152,8 +158,13 @@ app.frame("/not-allowed", async (c) => {
 
   return c.res({
     image: (
-      <div style={{ color: 'white', display: 'flex', alignItems: "center", justifyItems: "center", fontSize: 60 }}>
-        Join the Simpsons channel to cuteify your image
+      <div style={{
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        backgroundImage: 'url(https://portalapistack-uploadbucket5b1e560c-1uw248zf0758m.s3.us-east-2.amazonaws.com/protected/us-east-2%3A52bd2aac-245a-45e7-87ad-c3b3f59431f6/0d53e5b6-5403-4e4c-ac50-ed091dc4db4a/5a96dc3d-b799-423f-8475-8ae767dfd8b5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAR3QXGJWVBM5V4AOG%2F20240324%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20240324T163130Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGAaCXVzLWVhc3QtMiJIMEYCIQC6FIu%2B2r7elCKQa3eDzAbQa%2BzmJMe8LIy29JhFh1N4XwIhAIn2v0JhKVmOtafcXSgV9%2FndLVY%2FoKGMGo0s6wcj4au1KsQECHoQARoMMTI3ODIzOTI0NjUwIgx3rkoqGgYT%2BzJdvuMqoQTeF17uKlYf%2BtPkUKqRE87ZTQ%2BMCGmP51swuaVOQvkicRbbHwqLer3xJGlydU6fZhzXOG3HyX9vdVGeHlCSnbnrKF3RjCgHaA%2B%2BqtdvOD3bGSU1xev%2Fp5nxZBb0RGjNr42Eur6uitqoi0rEHJqn2ItrUgkQrcosOnCwk0JvK%2FzAHnAy%2FmKYzbAPnROU%2B%2FQZXSaZe%2FxXFqGj9iPzcYQ1%2B0O1Xqukan1fKoi3c2I3OXBzUeoXdlmJ5Ez35iJcaM0D8nE5k0yh0GCmaYB8YJj4rDlCBrwy1WS0JE1JlLUjd%2FUm%2B6kFJ3SNMCKTj5%2BNIhtKaOQygWghCT5VHD0VMDDxDGmMSsGuIL4wf2R%2FOqb8AzKp2lyu%2BBet2WSfkZBiuJg4kb81xfP6YeErNf3RhIgHSAeGjTtmSfvS9AGQo%2B6VV0d2xEaTibsFuqx%2FHsYdR7nW3F%2FNdFCvMEqc4fZT12iEHqjpITUkFa9cB0SrtmdkbIsyehHSd7g14U7j7jbPBr81tEgSLeYaDrehrZozb03Dt8W0S2x3PAySRJE5967MRbfwst4ZrImoyjh0NAurx50jY8YQDmQ5CiwDa5vml%2BJzyabsD2PTGLcqhYfRUTYr0nAtfc3MexYNTNjP2WmDJkOFLKVN%2BdgBFhaqr6BstzvyW6qvJlayl1fqk8HTn%2FUmnhNfC%2BPcEYUNpipKWijPtfVljecciB0mTY1u6wc4zfulq%2FmR4TCXp4GwBjqEAtyTvtceE4Lb%2FWvZZHIKVTJvZX5%2BZrO4TQQxaOhp9CXu9zd%2FC5iSf9vaTyhNhsaUr2IA9YakI2bj3gSxxKSu5zZ1IagtbwEV0b2gGcuTmQwArAg3iW4S8peFIFyLfxSIYbbRaFERs0bvQFzE72SkuNYBZkWiob3iaF%2Fi8blmkCMhy8Bf%2FtxOkj4lA4g6kTG%2F4wb6GMA5VGcX99zE74JEyvBK4QCeiqSQX5vLZdoYCtKo9y7nQIbX9s07WmYoS4zF11Mw5%2F0VO8TSn6Z3wBMr0tu7FIpRUF%2BPUHA26fA7mLNVwZzX0VsdeUhcbYN7CkjpGupG%2BlhcpZAPZgjRLEvRepwzKQk4&X-Amz-Signature=a3892397568fe081a87517572581a777f744f961c3910ec58cd2feb79017c6a1&X-Amz-SignedHeaders=host&x-id=GetObject)'
+      }}>
+
       </div>
     ),
     intents: [status === "initial" && <Button>Click Here ?</Button>],
@@ -214,7 +225,13 @@ app.frame('/finish', (c) => {
   const { transactionId } = c
   return c.res({
     image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+      <div style={{
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        backgroundImage: 'url(https://portalapistack-uploadbucket5b1e560c-1uw248zf0758m.s3.us-east-2.amazonaws.com/protected/us-east-2%3A52bd2aac-245a-45e7-87ad-c3b3f59431f6/0d53e5b6-5403-4e4c-ac50-ed091dc4db4a/backgrounds-0e144e7e-e2c0-4c28-aa21-0bab70bf5dc1-chibi_yay.jpg.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAR3QXGJWVBM5V4AOG%2F20240324%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20240324T164325Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGAaCXVzLWVhc3QtMiJIMEYCIQC6FIu%2B2r7elCKQa3eDzAbQa%2BzmJMe8LIy29JhFh1N4XwIhAIn2v0JhKVmOtafcXSgV9%2FndLVY%2FoKGMGo0s6wcj4au1KsQECHoQARoMMTI3ODIzOTI0NjUwIgx3rkoqGgYT%2BzJdvuMqoQTeF17uKlYf%2BtPkUKqRE87ZTQ%2BMCGmP51swuaVOQvkicRbbHwqLer3xJGlydU6fZhzXOG3HyX9vdVGeHlCSnbnrKF3RjCgHaA%2B%2BqtdvOD3bGSU1xev%2Fp5nxZBb0RGjNr42Eur6uitqoi0rEHJqn2ItrUgkQrcosOnCwk0JvK%2FzAHnAy%2FmKYzbAPnROU%2B%2FQZXSaZe%2FxXFqGj9iPzcYQ1%2B0O1Xqukan1fKoi3c2I3OXBzUeoXdlmJ5Ez35iJcaM0D8nE5k0yh0GCmaYB8YJj4rDlCBrwy1WS0JE1JlLUjd%2FUm%2B6kFJ3SNMCKTj5%2BNIhtKaOQygWghCT5VHD0VMDDxDGmMSsGuIL4wf2R%2FOqb8AzKp2lyu%2BBet2WSfkZBiuJg4kb81xfP6YeErNf3RhIgHSAeGjTtmSfvS9AGQo%2B6VV0d2xEaTibsFuqx%2FHsYdR7nW3F%2FNdFCvMEqc4fZT12iEHqjpITUkFa9cB0SrtmdkbIsyehHSd7g14U7j7jbPBr81tEgSLeYaDrehrZozb03Dt8W0S2x3PAySRJE5967MRbfwst4ZrImoyjh0NAurx50jY8YQDmQ5CiwDa5vml%2BJzyabsD2PTGLcqhYfRUTYr0nAtfc3MexYNTNjP2WmDJkOFLKVN%2BdgBFhaqr6BstzvyW6qvJlayl1fqk8HTn%2FUmnhNfC%2BPcEYUNpipKWijPtfVljecciB0mTY1u6wc4zfulq%2FmR4TCXp4GwBjqEAtyTvtceE4Lb%2FWvZZHIKVTJvZX5%2BZrO4TQQxaOhp9CXu9zd%2FC5iSf9vaTyhNhsaUr2IA9YakI2bj3gSxxKSu5zZ1IagtbwEV0b2gGcuTmQwArAg3iW4S8peFIFyLfxSIYbbRaFERs0bvQFzE72SkuNYBZkWiob3iaF%2Fi8blmkCMhy8Bf%2FtxOkj4lA4g6kTG%2F4wb6GMA5VGcX99zE74JEyvBK4QCeiqSQX5vLZdoYCtKo9y7nQIbX9s07WmYoS4zF11Mw5%2F0VO8TSn6Z3wBMr0tu7FIpRUF%2BPUHA26fA7mLNVwZzX0VsdeUhcbYN7CkjpGupG%2BlhcpZAPZgjRLEvRepwzKQk4&X-Amz-Signature=03dc51133fcc58e6f2ee775f3924df0553324f69320a40f7bcc7b0c5ad5aba0d&X-Amz-SignedHeaders=host&x-id=GetObject)'
+
+      }}>
         Transaction ID: {transactionId}
       </div>
     )
